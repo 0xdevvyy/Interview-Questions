@@ -10,3 +10,6 @@ FROM STUDENTS
 WHERE MARKS > 75
 ORDER BY RIGHT(NAME, 3), ID;
 ```
+
+get the data FROM STUDENTS table WHERe MARKS is greater than 75 and ORDER it BY the last 3 characters of their NAME
+if the STUDENTS has the same last 3 char ORDER them BY their ID (ASCENDING ORDER is the default).

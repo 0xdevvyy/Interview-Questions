@@ -15,3 +15,5 @@ or using MOD
 SELECT DISTINCT CITY
 FROM STATION WHERE MOD(ID, 2) = 0;
 ```
+
+get the data FROM CITY,then filter WHERE ID is even, then SELECT the DISTINCT(unique) CITY.

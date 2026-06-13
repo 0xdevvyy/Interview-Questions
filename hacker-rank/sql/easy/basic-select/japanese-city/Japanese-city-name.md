@@ -9,3 +9,6 @@ SELECT NAME
 FROM CITY
 WHERE COUNTRYCODE = 'JPN';
 ```
+
+get the data FROM CITY table and will filter WHERE COUNTRYCODE is equals to 'JPN'
+and will SELECT only the NAME column.
