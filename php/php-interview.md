@@ -11,7 +11,7 @@ note: i ask AI to give me some php interview questions with no asnwers and make 
 2. Difference between echo and print. 
 >both is used to output text but echo is mostly used while print is sometimes use, echo can take multiple parameters but print can only output 1 string and always returns 1 
 
-'''php 
+```php 
 <?php 
     echo "Hello world!";
     echo "Hello" . . "world";
@@ -21,13 +21,14 @@ note: i ask AI to give me some php interview questions with no asnwers and make 
     $val = print("Hello");
     echo $val //it will print out (Hello1)
 ?>
+```
 
 
 
 3. What are superglobals?  
 >superglobals is a variable are available in any part of the code, superglobal is mainly use to store or get information to one page and another such as:
 
-'''php 
+```php 
 <?php
     $_GET['name'] -> Get method: it use to collect data in the html form
     $_POST[] -> Post method: collects and read data based by the user input
@@ -36,6 +37,7 @@ note: i ask AI to give me some php interview questions with no asnwers and make 
     $_SERVER[] -> contains server and environment info 
     $_FILES[] -> handles files upload in the form/ using the enctype="multipart/form-data"
 ?>
+```
 
 4. Difference between == and ===. 
 >== is for loose comparison and === is for strict comparison
@@ -45,7 +47,7 @@ note: i ask AI to give me some php interview questions with no asnwers and make 
 5. How do you declare variables in PHP?  
 > by using the $ sign here are the example of declaring variables in php 
 
-'''php 
+```php 
 <?php
     $name = "my name"; string
     $num = 1; integer
@@ -53,12 +55,13 @@ note: i ask AI to give me some php interview questions with no asnwers and make 
     $dec = 1.2; float
 
 ?>
+```
 
 6. What is isset() vs empty()?  
 >isset() checks if a variable has value and empty() checks if a variable is empty ("", null, 0 false, [])
 
 
-'''php
+```php
 <?php
 
     if(isset($_GET['name'])){
@@ -68,6 +71,7 @@ note: i ask AI to give me some php interview questions with no asnwers and make 
     }
     vice versa in using empty 
 ?>
+```
 
 
 
@@ -80,13 +84,14 @@ note: i ask AI to give me some php interview questions with no asnwers and make 
 8. What is a session in PHP?  
 >it is use to store user information and it can be used on different pages of the site, sometimes a session can be use when you login a page
 
-'''php
+```php
 <?php 
     session_start(); /starts a session
     session_unset(); /remove session variable
     session_destroy(); /delete a session
 
 ?>
+```
 
 9. What is GET vs POST?  
 >get is fetching the data, Post is submiting the data
@@ -94,7 +99,7 @@ note: i ask AI to give me some php interview questions with no asnwers and make 
 10. How do you connect PHP to MySQL?  
 >by using PDO or MySQLi
 
-'''php 
+```php 
 
 <?php 
     $server_name = "servername";
@@ -107,11 +112,12 @@ note: i ask AI to give me some php interview questions with no asnwers and make 
     //check connection
 
 ?>
+```
 
 
 **Coding Questions**
 1. Write a function to reverse a string.  
-'''php
+```php
 <?php 
     //strrev function
     function reverse($str){
@@ -127,13 +133,14 @@ note: i ask AI to give me some php interview questions with no asnwers and make 
     }
 
 ?>
+```
 
 
 
 
 
 2. Write a function to check if a number is even or odd. 
-'''php
+```php
 <?php 
 
     function isEven($num){
@@ -149,13 +156,14 @@ note: i ask AI to give me some php interview questions with no asnwers and make 
     }
 
 ?>
+```
 
 
 
 
 
 3. Create a script that prints Fibonacci numbers.  
-'''php
+```php
 
 <?php 
     function fib($num){
@@ -171,6 +179,7 @@ note: i ask AI to give me some php interview questions with no asnwers and make 
     }
 
 ?>
+```
 
 
 
@@ -194,7 +203,7 @@ note: i ask AI to give me some php interview questions with no asnwers and make 
 >by using the enctype="multipart/form-data"
 
 example code
-'''php 
+```php 
 <?php 
 
 <form action="" method="POST" enctype="multipart/form-data" >
@@ -221,6 +230,7 @@ example code
 
 
 ?>
+```
 
 
 
