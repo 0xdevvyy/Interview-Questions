@@ -536,9 +536,27 @@ Insert the following record:
 |----|------------|---------|------:|
 | 7 | Anna | Germany | 650 |
 
+```sql
+INSERT INTO PERSONS
+VALUE (7,'Anna', 'Germany', 650)
+
+you can add the columns but sql will know it that you will add values in all of the columns
+just make sure that the values are complete and the Values data types are correct
+
+```
+
 ---
 
 ## 22. Add Multiple Users
+
+```sql
+
+INSERT INTO PERSONS
+VALUE 
+    (8,'James', 'USA', 450)
+    (9,'Lucas', 'UK', 300)
+
+```
 
 Insert:
 
@@ -550,6 +568,15 @@ Insert:
 ---
 
 ## 23. Add a User With a NULL Score
+
+
+```sql
+
+INSERT INTO PERSONS
+VALUE 
+    (10,'Sarah', 'Canada', NULL)
+```
+
 
 Insert:
 
@@ -567,9 +594,29 @@ Peter completed a challenge.
 
 Update his score from `0` to `200`.
 
+
+```sql
+UPDATE users 
+SET score = 200
+where id = 5
+
+SELECT * FROM users where id = 5
+
+note check the where clause before you execute the update query
+```
+
 ---
 
 ## 25. Increase All USA Users' Scores by 100
+
+```sql
+UPDATE users 
+SET score = score + 100
+WHERE country = 'USA'
+
+```
+
+
 
 Current:
 
@@ -591,6 +638,14 @@ Expected:
 
 ## 26. Change lop's Name
 
+```sql 
+UPDATE users
+SET first_name = 'Lopez'
+WHERE id = 6
+
+```
+
+
 Update:
 
 ```text
@@ -603,9 +658,32 @@ lop → Lopez
 
 Update all users whose score is less than `300`.
 
+```sql
+
+UPDATE users
+SET score = score + 50
+WHERE score < 300
+
+
+```
+
+
+
+
 ---
 
 ## 28. Change Country Name
+
+```sql
+UPDATE users 
+SET country = 'United Kingdom'
+WHERE country = 'UK'
+
+
+```
+
+
+
 
 Rename:
 
@@ -623,11 +701,26 @@ for all matching users.
 
 Remove all users whose score is zero.
 
+```sql
+DELETE from users WHERE score = 0
+
+note: the same as Update check first which of the where clause you're deleting before executing it
+
+
+```
+
+
+
 ---
 
 ## 30. Delete All Users From Germany
 
 Remove every German user.
+
+```sql
+DELETE FROM users WHERE country = 'Germany'
+
+```
 
 ---
 
@@ -635,11 +728,33 @@ Remove every German user.
 
 Delete the user with the lowest score in the table.
 
+
+```sql
+DELETE FROM users ORDER BY score ASC LIMIT 1
+
+
+or by using the subquery
+
+
+DELETE FROM users WHERE score = (
+    SELECT MIN(score) FROM users
+)
+
+
+```
+
 ---
 
 # ALTER TABLE Challenges
 
 ## 32. Add an Email Column
+
+```sql
+ALTER TABLE users
+ADD email VARCHAR(100) NOT NULL
+
+
+```
 
 Add a new column:
 
@@ -651,6 +766,14 @@ email VARCHAR(100)
 
 ## 33. Add a Created At Column
 
+
+```sql
+ALTER TABLE users
+ADD created_at DATETIME()
+
+
+```
+
 Add:
 
 ```sql
@@ -660,6 +783,14 @@ created_at DATETIME
 ---
 
 ## 34. Rename a Column
+
+```sql
+ALTER TABLE users
+RENAME COLUMN first_name TO name
+
+
+```
+
 
 Rename:
 
@@ -676,6 +807,15 @@ name
 ---
 
 ## 35. Change Score Data Type
+
+
+```sql
+
+ALTER TABLE users
+MODIFY COLUMN score DECIMAL(10,2)
+
+```
+
 
 Change:
 
@@ -696,7 +836,8 @@ score DECIMAL(10,2)
 Set a default value of:
 
 ```sql
-0
+ALTER TABLE users
+ALTER COLUMN score SET DEFAULT 0
 ```
 
 for the `score` column.
@@ -704,6 +845,13 @@ for the `score` column.
 ---
 
 ## 37. Add a New Status Column
+
+```sql
+ALTER TABLE users
+ADD status VARCHAR(20) NOT NULL
+
+
+```
 
 Add:
 
@@ -721,6 +869,13 @@ active
 
 ## 38. Drop the Status Column
 
+```sql  
+ALTER TABLE users
+DROP COLUMN status
+
+
+```
+
 Remove:
 
 ```sql
@@ -735,6 +890,14 @@ from the table.
 
 ## 39. Drop the Users Table
 
+```sql
+
+DROP TABLE users 
+
+TRUNCATE TABLE users
+
+```
+
 Delete the entire table.
 
 ### Warning
@@ -748,6 +911,13 @@ This removes:
 ---
 
 ## 40. Drop a Database
+
+
+```sql
+DROP DATABASE myDB
+
+```
+
 
 Delete a database named:
 
@@ -768,6 +938,16 @@ This removes everything inside the database.
 1. Add:
 
 ```sql
+ALTER TABLE users
+ADD COLUMN bonus INT NOT NULL
+
+
+
+```
+
+
+
+```sql
 bonus INT
 ```
 
@@ -779,6 +959,15 @@ bonus = 100
 
 for users with score greater than `500`.
 
+
+```sql
+UPDATE users
+SET bonus = 100
+WHERE score > 500
+
+
+```
+
 ---
 
 ## 42. Create a Country Leaderboard
@@ -786,10 +975,28 @@ for users with score greater than `500`.
 1. Add a column:
 
 ```sql
+ALTER TABLE users
+ADD COLUMN rank_in_country INT NOT NULL
+
+```
+
+```sql
 rank_in_country INT
 ```
 
 2. Update the ranking based on score.
+note: will answer this.
+```sql 
+
+UPDATE users
+SET rank_in_country 
+WHERE score = (
+    SET score RANK() OVER (ORDER BY score) FROM users
+)
+
+
+```
+
 
 ---
 
@@ -798,20 +1005,56 @@ rank_in_country INT
 1. Create:
 
 ```sql
+CREATE TABLE archive_users (
+    id INT NOT NULL,
+    //same as structure as the user
+
+    CONSTRAINED pk_arch_users PRIMARY KEY (id)
+)
+
+
+```
+
+```sql
 archived_users
 ```
 
 table.
 
 2. Move users with score below `100`.
+s
+```sql
+INSERT INTO archive_users (id, first_name, country, score)
+SELECT id, first_name, country, score 
+    FROM users 
+    WHERE score < 100
+
+
+```
 
 3. Delete them from the original table.
+
+```sql
+DELETE FROM users WHERE score < 100
+
+
+```
+
 
 ---
 
 ## 44. Soft Delete Challenge
+is this in users table or archive? i will use users table for now
 
 1. Add:
+
+```sql
+ALTER TABLE users
+ADD deleted_at DATETIME NULL
+
+
+
+```
 
 ```sql
 deleted_at DATETIME NULL
@@ -822,6 +1065,13 @@ deleted_at DATETIME NULL
 ---
 
 ## 45. Migration Challenge (Laravel Style)
+
+
+```sql 
+ALTER TABLE users
+ADD created_at DATETIME 
+
+```
 
 Transform the table from:
 
@@ -841,12 +1091,53 @@ Using only `ALTER TABLE` statements.
 
 Starting from the original table:
 
-1. Add an `email` column.
+1. Add an `email` column.s
 2. Add a `status` column with default value `active`.
 3. Update all USA users to `premium`.
 4. Increase scores below 300 by 50.
 5. Delete users with score still below 100.
 6. Display the final table sorted by score descending.
+
+```sql
+ALTER TABLE users
+ADD email VARCHAR(30) NOT NULL,
+ADD status VARCHAR(10) SET DEFAULT TO 'active',
+```
+
+3. it doesnt specify which column should i update premium into 
+```sql
+UPDATE FROM user
+SET status = 'premium'
+WHERE country = 'USA'
+
+```
+
+4.
+```sql
+UPDATE FROM users 
+SET score = score + 50
+WHERE score < 300
+
+```
+
+5.
+
+```sql
+DELETE FROM users 
+WHERE score < 100
+
+
+```
+
+6.
+
+```sql
+SELECT * FROM users 
+ORDER BY score DESC
+
+
+```
+
 
 ### Skills Tested
 
