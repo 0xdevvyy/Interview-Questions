@@ -19,6 +19,12 @@
 
 Write a query to display all users whose country is `USA`.
 
+```sql
+
+SELECT * FROM users WHERE country = 'USA';
+
+```
+
 ### Expected Columns
 
 ```sql
@@ -30,6 +36,13 @@ first_name, score
 ## 2. Find Users With Score Greater Than 500
 
 Write a query to display users whose score is greater than `500`.
+
+
+```sql
+
+SELECT * FROM users WHERE score > 500;
+
+```
 
 ### Expected Output
 
@@ -44,6 +57,14 @@ Georg
 
 Write a query to display users who have not scored any points.
 
+
+```sql
+
+SELECT * FROM users WHERE score = 0
+
+```
+
+
 ### Expected Output
 
 ```text
@@ -56,11 +77,24 @@ Peter
 
 Write a query to display all users ordered from highest score to lowest score.
 
+
+```sql
+
+SELECT * FROM users ORDER BY score DESC
+
+```
+
 ---
 
 ## 5. Show Unique Countries
 
 Write a query to display all distinct countries.
+
+```sql 
+
+SELECT DISTINCT country FROM users
+
+```
 
 ### Expected Output
 
@@ -78,6 +112,16 @@ UK
 
 Write a query that returns the number of users from each country.
 
+```sql 
+
+
+SELECT country, COUNT(id) as total_users 
+    FROM users
+    GROUP BY country;
+
+```
+
+
 ### Expected Output
 
 | country | total_users |
@@ -91,6 +135,14 @@ Write a query that returns the number of users from each country.
 ## 7. Calculate Average Score Per Country
 
 Write a query that returns the average score for each country.
+
+```sql 
+
+SELECT country, AVG(score) as avg_score 
+    FROM users
+    GROUP BY country
+
+```
 
 ### Expected Output
 
@@ -106,6 +158,15 @@ Write a query that returns the average score for each country.
 
 Write a query that returns the country with the highest average score.
 
+```sql
+
+SELECT country, AVG(score) as avg_score FROM users
+GROUP BY country
+ORDER BY avg_score DESC
+LIMIT 1
+
+```
+
 ### Expected Output
 
 ```text
@@ -118,6 +179,14 @@ UK
 
 Write a query that returns all users whose score is higher than the average score of all users.
 
+```sql
+
+SELECT * FROM users WHERE score > (
+    SELECT AVG(score) FROM users
+)
+
+```
+
 ### Hint
 
 Use a subquery.
@@ -127,6 +196,15 @@ Use a subquery.
 ## 10. Find the Second Highest Score
 
 Write a query that returns the second highest score in the table.
+
+```sql
+
+SELECT MAX(score) FROM users WHERE score < (
+    SELECT MAX(score) FROM users
+)
+
+```
+
 
 ### Expected Output
 
@@ -141,6 +219,12 @@ Write a query that returns the second highest score in the table.
 ## 11. Rank Users By Score
 
 Write a query that ranks all users based on score from highest to lowest.
+
+```sql
+
+SELECT *, RANK() OVER (ORDER BY score DESC) AS rankings FROM users 
+
+```
 
 ### Expected Output
 
@@ -173,6 +257,16 @@ DENSE_RANK()
 
 Write a query that returns users whose score is greater than the average score of users from the same country.
 
+```sql
+
+SELECT first_name FROM users WHERE score > (
+    SELECT AVG(score) from users
+)
+
+```
+
+
+
 ### Expected Output
 
 | first_name |
@@ -187,6 +281,16 @@ Write a query that returns users whose score is greater than the average score o
 
 Write a query that returns the highest-scoring user from every country.
 
+```sql
+
+SELECT * FROM users u WHERE score = (
+    SELECT MAX(score)
+        FROM users
+        WHERE country = u.country        
+)
+ORDER BY score DESC
+```
+
 ### Expected Output
 
 | country | first_name | score |
@@ -199,7 +303,18 @@ Write a query that returns the highest-scoring user from every country.
 
 ## 14. Find Countries With Total Score Greater Than 1000
 
-Write a query that returns countries whose combined score exceeds `1000`.
+Write a query that returns countries whose combined score greater than or equal `1000`.
+
+note: changing the question, there will be no output if it exceeds than 1000.
+
+```sql
+
+SELECT country, SUM(score) as sum_country FROM users 
+    GROUP BY country
+    HAVING SUM(score) >= 1000;
+
+```
+
 
 ### Expected Output
 
@@ -212,6 +327,18 @@ Write a query that returns countries whose combined score exceeds `1000`.
 ## 15. Calculate Each User's Contribution to Their Country's Total Score
 
 Write a query that returns each user's percentage contribution to their country's total score.
+
+```sql 
+
+SELECY *, ROUND(score * 100 / (
+    SELECT SUM(score) 
+        FROM users u2
+             WHERE u2.country = u1.country
+    ), 2
+) AS per_contribution FROM users u1
+
+```
+
 
 ### Example Output
 
@@ -228,6 +355,18 @@ Write a query that returns each user's percentage contribution to their country'
 ## Country Statistics Dashboard
 
 Write a single query that returns:
+
+
+```sql
+
+SELECT country, 
+    COUNT(id) as total_users,
+    AVG(score) as avg_score,
+    MAX(score) as highest_score,
+    MIN(score) as lowest_score 
+FROM users GROUP BY country
+
+``
 
 ```text
 country
@@ -268,9 +407,24 @@ lowest_score
 
 Return the user with the lowest score for every country.
 
+```sql 
+
+SELECT country, MIN(score) FROM users GROUP BY country
+
+```
+
+
+
 ---
 
 ## 17. Find Countries With More Than One User
+
+
+```sql 
+
+SELECt country, COUNT(id) FROM users GROUP BY country HAVING COUNT(id) > 1;
+
+```
 
 Use `HAVING`.
 
@@ -286,6 +440,18 @@ Use `HAVING`.
 ## 18. Display Users and Their Country Ranking
 
 Rank users only within their own country.
+
+
+```sql 
+
+SELECT first_name, coutnry, score, 
+    RANK() OVER (
+        PARTITION BY country ORDER BY SCORE DESC
+    ) AS rankings
+    FROM users;
+```
+
+
 
 ### Example
 
@@ -305,6 +471,18 @@ PARTITION BY country
 
 ## 19. Find the Difference Between Each User's Score and Their Country Average
 
+```sql 
+
+SELECT first_name, country,score
+    AVG(score) AS country_avg
+    score - AVG(score) OVER (PARTITION BY country) as difference
+    FROM users
+    GROUP BY first_name, country, score
+
+
+```
+
+
 Expected Columns:
 
 ```sql
@@ -320,6 +498,17 @@ difference
 ## 20. Find Countries Where Every User Has a Score Greater Than 300
 
 Return only countries where all users scored above `300`.
+
+```sql 
+
+SELECT country, MIN(score) 
+    FROM users 
+    GROUP BY country 
+    HAVING MIN(score) > 300; 
+
+```
+
+
 
 
 # Data Modification Challenges (INSERT, UPDATE, ALTER, DELETE, DROP)
