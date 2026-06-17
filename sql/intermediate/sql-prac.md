@@ -54,6 +54,73 @@ These challenges are designed to push you beyond basic JOINs and prepare you for
 
 ---
 
+## Creatinf the database 
+```sql
+DROP DATABASE IF EXISTS sql_join_practice;
+
+CREATE DATABASE sql_join_practice;
+
+USE sql_join_practice;
+
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    country VARCHAR(50)
+);
+
+CREATE TABLE scores (
+    id INT PRIMARY KEY,
+    user_id INT,
+    score INT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE orders (
+    id INT PRIMARY KEY,
+    user_id INT,
+    amount DECIMAL(10,2),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE countries (
+    id INT PRIMARY KEY,
+    country_name VARCHAR(50),
+    continent VARCHAR(50)
+);
+
+INSERT INTO users (id, first_name, country) VALUES
+(1, 'Maria', 'Germany'),
+(2, 'John', 'USA'),
+(3, 'Georg', 'UK'),
+(4, 'Anna', 'USA'),
+(5, 'Ken', 'Japan'),
+(6, 'Lisa', 'Germany');
+
+INSERT INTO scores (id, user_id, score) VALUES
+(1, 1, 350),
+(2, 2, 900),
+(3, 3, 750),
+(4, 4, 400),
+(5, 5, 850);
+
+INSERT INTO orders (id, user_id, amount) VALUES
+(1, 1, 120),
+(2, 1, 300),
+(3, 2, 500),
+(4, 4, 250),
+(5, 5, 700);
+
+INSERT INTO countries (id, country_name, continent) VALUES
+(1, 'Germany', 'Europe'),
+(2, 'USA', 'North America'),
+(3, 'UK', 'Europe'),
+(4, 'Japan', 'Asia');
+
+```
+
+
+
+
 # Challenge 1
 
 Display all users and their scores.
