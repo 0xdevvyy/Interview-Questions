@@ -613,6 +613,25 @@ Expected SQL Topics:
 - ORDER BY
 - Aggregate Functions
 
+i dont know the COALESCE one
+```sql
+
+SELECT u.first_name, u.country, c.continent, s.score, SUM(o.amount) AS total_amount
+FROM users AS u
+LEFT JOIN scores AS s
+    ON u.id = s.user_id
+LEFT JOIN orders as o
+    ON u.id = o.user_id
+LEFT JOIN countries AS c
+    ON u.country = c.country_name
+WHERE s.score > 300
+    GROUP BY u.first_name, s.score,u.country, c.continent
+    ORDER BY
+    total_amount DESC,
+    s.score DESC;
+
+```
+
 ---
 
 # Nightmare Interview Challenge
@@ -633,6 +652,33 @@ Rules:
 - Score must be above country average score.
 - Total spending must be above overall average spending.
 - Sort by score descending.
+
+```sql
+
+SELECT u.first_name, u.country, c.continent, s.score, SUM(o.amount) AS total_amount
+FROM users AS u
+LEFT JOIN scores AS s
+    ON u.id = s.user_id
+LEFT JOIN orders as o
+    ON u.id = o.user_id
+LEFT JOIN countries AS c
+    ON u.country = c.country_name
+WHERE s.score > (
+		SELECT AVG(s2.score) FROM scores AS s2
+    		JOIN users AS u2
+    		ON s2.user_id = u2.id
+            WHERE u2.country = u.country
+	)
+    GROUP BY  u.id,u.first_name, s.score,u.country, c.continent
+    HAVING total_amount > (
+    	SELECT AVG(o2.amount) FROM orders AS o2
+    )
+    ORDER BY
+    total_amount DESC,
+    s.score DESC;
+
+
+```
 
 Topics Tested:
 
