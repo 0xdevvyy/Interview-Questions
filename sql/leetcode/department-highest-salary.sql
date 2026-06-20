@@ -1,0 +1,15 @@
+# Write your MySQL query statement below
+-- Write a solution to find employees who have the highest salary in each of the departments.
+SELECT
+    d.name AS Department,
+    e.name AS Employee,
+    e.salary AS Salary
+FROM Employee e
+JOIN Department d
+    ON e.departmentId = d.id
+WHERE e.salary = (
+    SELECT MAX(salary)
+    FROM Employee
+    WHERE departmentId = e.departmentId
+);
+
