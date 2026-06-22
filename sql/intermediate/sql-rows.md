@@ -32,11 +32,29 @@ You have two tables:
 
 Return all customer names from both tables **without duplicates**.
 
+```sql
+SELECT id, name FROM customers_ph
+UNION
+SELECT id, name FROM customers_us
+
+
+```
+
 ---
 
 ## Question 2
 
 Using the same tables, return all customer names **including duplicates**.
+note: * is not good when in union because in union it need to be exactly the same column per query, same datatype, same column placing,
+you can use * when seeing or mapping the data first and then map the column.
+
+```sql
+SELECT * FROM customers_ph
+UNION ALL 
+SELECT * FROM customers_us
+
+
+```
 
 ---
 
@@ -47,12 +65,17 @@ Explain the difference between:
 ```sql
 UNION
 ```
+union return all distinct rows from both queries
+each rows will only appear only ones because it returns the distinct data, it will nor return any duplicates data
 
 and
 
 ```sql
 UNION ALL
 ```
+
+UNION ALL will return all rows and everythin will be return it will not remove any duplicates
+you can use UNION ALL when checking if you have any duplicate data
 
 ---
 
@@ -77,6 +100,13 @@ You have:
 | Ken |
 
 Return people who appear in **both tables**.
+NOte: this looks like INNER JOIN
+```sql
+SELECT name FROM developers 
+INTERSECT
+SELECT name FROM designers
+
+```
 
 ---
 
@@ -104,11 +134,26 @@ Tables:
 
 Find employees who worked in **both years**.
 
+```sql
+SELECT employee_id FROM employee_2024
+INTERSECT
+SELECT employee_id FROM employee_2025
+
+
+```
+
 ---
 
 ## Question 6
 
 Find employees who worked in **2024 but not 2025**.
+
+```sql
+SELECT employee_id FROM employee_2024
+EXCEPT
+SELECT employee_id FROM employee_2025
+```
+
 
 ---
 
@@ -116,11 +161,25 @@ Find employees who worked in **2024 but not 2025**.
 
 Find employees who worked in **2025 but not 2024**.
 
+```sql
+SELECT employee_id FROM employee_2025
+EXCEPT
+SELECT employee_id FROM employee_2024
+```
 ---
 
 ## Question 8
 
 Return all unique employees who worked in either year.
+
+```sql
+SELECT employee_id FROM employee_2024
+UNION
+SELECT employee_id FROM employee_2025
+
+```
+
+
 
 ---
 
@@ -154,6 +213,19 @@ Math Only
 Science Only
 ```
 
+
+```sql
+SELECT student_id FROM students_math
+EXCEPT
+SELECT student_id FROM students_science
+
+UNION
+
+SELECT student_id FROM students_science
+EXCEPT
+SELECT student_id FROM students_math
+```
+
 ---
 
 # Intermediate-Advanced
@@ -180,11 +252,28 @@ Tables:
 
 Find customers who purchased both online and in-store.
 
+```sql
+SELECT customer_id FROM orders_online
+INTERSECT
+SELECT customer_id FROM orders_store
+
+
+```
+
 ---
 
 ## Question 11
 
 Find customers who purchased **only online**.
+
+```sql
+SELECT customer_id FROM orders_online
+EXCEPT 
+SELECT customer_id FROM orders_store
+
+
+```
+
 
 ---
 
@@ -192,11 +281,27 @@ Find customers who purchased **only online**.
 
 Find customers who purchased **only in-store**.
 
+```sql
+SELECT customer_id FROM orders_store
+EXCEPT 
+SELECT customer_id FROM orders_online
+
+```
+
 ---
 
 ## Question 13
 
 Return customers who purchased from **at least one channel**.
+
+```sql
+SELECT customer_id FROM orders_online
+UNION 
+SELECT customer_id FROM orders_store
+
+
+```
+
 
 ---
 
@@ -241,6 +346,14 @@ Find employees who are:
 Developer AND Designer
 ```
 
+
+```sql
+SELECT employee_id FROM developers
+INTERSECT
+SELECT employee_id FROM designers
+
+```
+
 ---
 
 ## Question 15
@@ -251,6 +364,14 @@ Find employees who are:
 Developer OR Designer
 ```
 
+```sql
+SELECT employee_id FROM developer
+UNION 
+SELECT employee_id FROM designers
+
+```
+
+
 ---
 
 ## Question 16
@@ -259,6 +380,13 @@ Find employees who are:
 
 ```text
 Developer BUT NOT Tester
+```
+
+```sql
+SELECT employee_id FROM developer
+EXCEPT 
+SELECT employee_id FROM developer
+
 ```
 
 ---
@@ -272,6 +400,17 @@ Developer
 Designer
 Tester
 ```
+
+```sql
+SELECT employee_id FROM developers
+INTERSECT 
+SELECT employee_id FROM designers
+INTERSECT 
+SELECT employee_id FROM testers
+
+```
+
+
 
 ---
 
@@ -304,11 +443,33 @@ Tables:
 
 Return users who are premium but not banned.
 
+```sql
+
+
+SELECT user_id FROM premium_users
+EXCEPT 
+SELECT user_id FROM banned_users
+
+
+```
+
 ---
 
 ## Question 19
 
 Find users who are neither premium nor banned.
+
+```sql
+
+SELECT id FROM users
+EXCEPT
+SELECT user_id FROM premium_users
+EXCEPT
+SELECT user_id FROM banned_users;
+
+```
+
+
 
 ---
 
@@ -316,6 +477,7 @@ Find users who are neither premium nor banned.
 
 Without using JOINs, return:
 
+the text is the query itself 
 ```text
 All Active Users
 
@@ -326,6 +488,17 @@ All Premium Users
 EXCEPT
 
 All Banned Users
+```
+
+
+```sql
+
+SELECT id FROM users
+UNION 
+SELECT user_id FROM premium_users
+EXCEPT 
+SELECT user_id FROM banned_users
+
 ```
 
 ---
@@ -400,11 +573,21 @@ React
 
 When would you use `UNION ALL` instead of `UNION`?
 
+```text
+You can use UNION ALL when you want to get all of the data, and to check if you want to know any duplicate data
+
+
+```
+
 ---
 
 ## Question 22
 
 Why is `UNION ALL` usually faster than `UNION`?
+
+```text
+UNION ALL doesn't check anything it just joins and return all of the data, but UNION has to check any duplicate data before it return the data to you 
+```
 
 ---
 
@@ -412,11 +595,19 @@ Why is `UNION ALL` usually faster than `UNION`?
 
 Which set operation removes duplicates automatically?
 
+```text
+UNION
+```
+
 ---
 
 ## Question 24
 
 What SQL operation is equivalent to an intersection?
+
+```text
+the answer is in the question itself "INTERSECT"
+```
 
 ---
 
@@ -424,11 +615,22 @@ What SQL operation is equivalent to an intersection?
 
 How can you simulate `INTERSECT` in MySQL if it is not supported?
 
+```text
+using  INNER JOIN, IN.
+```
+
+
 ---
 
 ## Question 26
 
 How can you simulate `EXCEPT` in MySQL?
+```text
+i can use the where clause or NOT IN and LEFT JOIN 
+
+```
+
+
 
 ---
 
@@ -436,23 +638,75 @@ How can you simulate `EXCEPT` in MySQL?
 
 Can columns have different names in a `UNION` query?
 
+```text
+yes, you just need that the columns are at the same order, same datatype.
+
+```
+
 ---
 
 ## Question 28
 
 What happens if the column counts do not match in a `UNION`?
 
+```text
+it will result to an error
+
+
+```
 ---
 
 ## Question 29
 
 What happens if the data types do not match?
 
+```text
+
+It will result in an error, because UNION needs to be exactly the same, column order and data type
+in the column order if it is the same data type and all the data will be jumble 
+example:
+
+first_name
+last_name
+
+UNION
+
+last_name
+Firstname
+
+
+other data will result to 
+lastname | firstname
+and firstname | lastname
+```
+
 ---
 
 ## Question 30
 
 Which is generally faster: `UNION` or `UNION ALL`? Explain why.
+
+```text
+UNION ALL is much faster because it will just return and join all of the data rather than checking it first if there is a duplicate
+
+first UNION all will just merge all of the data and will return it to you in UNION 
+it will get all of the data of the first table and then it will check 1 by 1 if there is any duplicate data in the other table if there is not and then that data will be returned to you 
+
+UNION is just basically doing DISTINCT, it is doing sorting first 
+UNION ALL is just basically returning you the data of both table, it will not check anything just and will just return all the nuber of rows, this one is just ehh here is the data that you want, 
+
+her eis another explanation that i just thought of 
+your mother ordered you to go to a supermarket and buy all of the items in the list
+and at the same time you're grandmother also ordered you to go get some items on her list 
+
+and now you are in the supermarket and you take a look at both of the list and then you see that there is a same items in the list but you still buy all of the items 
+that your grandmother and your mother asked you to buy, you just get all of the items and you just finished the chore that's it.
+
+
+but in UNION you will buy just one item even if you see a duplicate in the list in your grandmothers list. my grammar is bad HAHAHAHA
+
+```
+
 
 ---
 
